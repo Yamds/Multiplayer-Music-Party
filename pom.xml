@@ -36,13 +36,13 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-<!--        连接数据库需要-->
+<!--    连接数据库需要-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.30</version>
         </dependency>
-<!--        简单将java对象转换成json-->
+<!--    简单将java对象转换成json-->
         <dependency>
             <groupId>net.sf.json-lib</groupId>
             <artifactId>json-lib</artifactId>
