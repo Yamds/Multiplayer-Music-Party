@@ -37,7 +37,7 @@ public class Jdbc {
     }
 
 //    3. 执行sql操作(可以封装成各种方法)
-    public static List<Map<String,Object>> executeSQL(String sql, Object... params) {
+    public static ResultSet executeSQL(String sql, Object... params) {
         Connection conn = null;
         PreparedStatement preStat = null;
         ResultSet result = null;
@@ -54,14 +54,34 @@ public class Jdbc {
             // 获取结果集
             result = preStat.executeQuery(sql);
             // 将结果集转为一个List集合
-            return resultSetToMapList(result);
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
         }finally {
             closeObj(conn, preStat, result);
         }
         // 返回一个空集合
+        return null;
+    }
+
+    // 搜索全部用户
+    public static List<Map<String,Object>> queryAll(String sql, Object... params) {
+        ResultSet result = executeSQL(sql, params);
+
+        if (result != null) {
+            return resultSetToMapList(result);
+        }
+        // 返回一个空集合
         return new ArrayList<>();
+    }
+
+    // 只返回数据的第一条，适合查找具体用户
+    public static Map<String,Object> queryOne(String sql, Object... params) {
+        List<Map<String, Object>> list = queryAll(sql, params);
+        if(list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
     // 将 ResultSet 转换成列表对象 List<Map<String,Object>> 的方法，并返回
