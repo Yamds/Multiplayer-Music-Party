@@ -7,7 +7,7 @@ public class User {
   private String username;
   private java.sql.Timestamp createTime;
   private java.sql.Timestamp updateTime;
-  private String status;
+  private long status;
   private String placeholder1;
   private String placeholder2;
   private String placeholder3;
@@ -49,11 +49,11 @@ public class User {
   }
 
 
-  public String getStatus() {
+  public long getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(long status) {
     this.status = status;
   }
 

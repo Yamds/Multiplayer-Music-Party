@@ -1,12 +1,15 @@
 package cafe.yamds.multiplayermusicparty.dao;
 
-import java.sql.Timestamp;
+import cafe.yamds.multiplayermusicparty.entity.User;
 
-public interface UserManager {
+import java.sql.Timestamp;
+import java.util.Map;
+
+public interface UserManagerDao {
 //    第一次使用该用户名时，调用创建方法，往数据库插入数据
     public boolean createUser(String username);
 //    当数据库中有该用户，使用登录方法
-    public boolean login(String username);
+    public User login(String username);
 //    退出
     public boolean logout(String username);
 //    查询用户是否存在
