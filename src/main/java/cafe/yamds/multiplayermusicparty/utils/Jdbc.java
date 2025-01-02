@@ -45,23 +45,38 @@ public class Jdbc {
             // 获取连接
             conn = getConnection();
             preStat = conn.prepareStatement(sql);
-
-            // 设置 SQL 参数
             for (int i = 0; i < params.length; i++) {
-                preStat.setObject(i + 1, params[i]);  // 设置参数
+                preStat.setObject(i + 1, params[i]);  // 设置SQL参数
             }
-
-            // 获取结果集
-            result = preStat.executeQuery(sql);
-            // 将结果集转为一个List集合
-            return result;
+            result = preStat.executeQuery(); // 获取结果集
+            return result;  // 将结果集转为一个List集合
         } catch (SQLException e) {
             e.printStackTrace();
         }finally {
-            closeObj(conn, preStat, result);
+            closeObj(result, preStat, conn);
         }
         // 返回一个空集合
         return null;
+    }
+
+    // 执行 update 操作 返回结果是否成功
+    public static boolean updateSQL(String sql, Object... params) {
+        Connection conn = null;
+        PreparedStatement preStat = null;
+        try {
+            // 获取连接
+            conn = getConnection();
+            preStat = conn.prepareStatement(sql);
+            for (int i = 0; i < params.length; i++) {
+                preStat.setObject(i + 1, params[i]);  // 设置SQL参数
+            }
+            return preStat.executeUpdate()>0;  // 返回执行是否成功
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            closeObj(null, preStat, conn);
+        }
+        return false;
     }
 
     // 搜索全部用户
@@ -83,6 +98,12 @@ public class Jdbc {
         }
         return list.get(0);
     }
+
+    // 插入数据
+    public static boolean insert(String sql, Object... params) {
+        return updateSQL(sql, params);
+    }
+
 
     // 将 ResultSet 转换成列表对象 List<Map<String,Object>> 的方法，并返回
     public static List<Map<String, Object>> resultSetToMapList(ResultSet result) {
@@ -116,7 +137,7 @@ public class Jdbc {
 
 
     // 三个对象创建，执行sql语句结束后，关闭三个对象
-    public static void closeObj(Connection conn, PreparedStatement preStat, ResultSet result) {
+    public static void closeObj(ResultSet result, PreparedStatement preStat, Connection conn) {
         try {
             if(result != null) {
                 result.close();
@@ -125,7 +146,7 @@ public class Jdbc {
                 preStat.close();
             }
             if(conn != null) {
-                preStat.close();
+                conn.close();
             }
         }catch (SQLException e) {
             e.printStackTrace();
